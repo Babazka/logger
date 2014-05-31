@@ -1,7 +1,7 @@
 Logger
 ======
 
-Simple HTTP logger which writes HTTP queries to text files.
+Simple HTTP logging server which writes HTTP queries to text files.
 
 Usage
 -----
