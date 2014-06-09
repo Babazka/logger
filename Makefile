@@ -10,6 +10,10 @@ $(BIN):
 run: $(BIN)
 	bin/$(BIN)
 
+daemon: $(BIN)
+	-killall bin/$(BIN)
+	nohup bin/$(BIN) >/dev/null 2>&1 &
+
 test:
 	go test $(BIN)
 

@@ -96,8 +96,28 @@ func GreatLogger(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK\r\n"))
 }
 
+var (
+	stash []byte
+)
+
+func StashLogger(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		w.Write(stash)
+	} else {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Printf("cannot read request body: %s: %s", r.RequestURI, err)
+			return
+		}
+		r.Body.Close()
+		stash = body
+		w.Write([]byte("OK\r\n"))
+	}
+}
+
 func main() {
 	flag.Parse()
+	http.HandleFunc("/stash", StashLogger)
 	http.HandleFunc("/", GreatLogger)
 	log.Println("Listening on ", *listenAddress)
 	http.ListenAndServe(*listenAddress, nil)
